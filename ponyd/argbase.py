@@ -20,7 +20,7 @@ def filtered_sorted(name_arg_tuple_iter):
                    for name, arg
                    in name_arg_tuple_iter
                    if isinstance(arg, Arg)), 
-                  key=lambda (_, arg): arg.ordinal)
+                  key=lambda __arg: __arg[1].ordinal)
 
 def register_argument(name, arg, target_parser, expected_args):
     """
@@ -96,7 +96,7 @@ def _inject_vals(name, bases, dict):
 
     parser = dict['__parser__']
 
-    register_iter(dict.iteritems(), parser, expected_args)
+    register_iter(iter(dict.items()), parser, expected_args)
 
     # Go through all the base classes that aren't command and find attrs in
     # them.  These are mixins or group
@@ -132,15 +132,13 @@ class MetaBase(abc.ABCMeta):
         return cls
 
 
-class Command(Ordered):
-    __metaclass__ = MetaBase
-
+class Command(Ordered, metaclass=MetaBase):
     def __call__(self):
         raise NotImplementedError("Must override __call__ in " + self.__class__.__name__)
 
     def __init__(self, args):
         self.__args__ = args
-        for arg_name, var_name in self.__expectedargs__.iteritems():
+        for arg_name, var_name in self.__expectedargs__.items():
             setattr(self, var_name, getattr(args, arg_name))
 
     @classmethod

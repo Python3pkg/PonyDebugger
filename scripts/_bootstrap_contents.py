@@ -19,13 +19,13 @@ def after_install(options, home_dir):
             symlink_target  = os.path.join(symlink_target, 'ponyd')
 
         if os.path.exists(symlink_target):
-            print "Symlink to %s already exists. (continuing anyways)" % symlink_target
+            print("Symlink to %s already exists. (continuing anyways)" % symlink_target)
         try:
-            print "Symlinking %s to %s" % (ponyd_path, symlink_target)
+            print("Symlinking %s to %s" % (ponyd_path, symlink_target))
             os.symlink(ponyd_path, symlink_target)
         except:
-            print >>sys.stderr, "Error creating symlink. Manually run: sudo ln -s '%s' '%s'" % (ponyd_path, symlink_target)
+            print("Error creating symlink. Manually run: sudo ln -s '%s' '%s'" % (ponyd_path, symlink_target), file=sys.stderr)
 
     subprocess.check_call([ponyd_path, 'update-devtools'])
 
-    print "Congratulations! ponyd has been installed to %s" % ponyd_path
+    print("Congratulations! ponyd has been installed to %s" % ponyd_path)

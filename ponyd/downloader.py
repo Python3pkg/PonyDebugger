@@ -2,10 +2,10 @@ import argparse
 import json
 import os
 import shutil
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 
-from cStringIO import StringIO
+from io import StringIO
 
 from ponyd.constants import DEFAULT_DEVTOOLS_PATH
 from ponyd.command import PonydCommand
@@ -26,22 +26,22 @@ class Downloader(PonydCommand):
 
     def __call__(self):
         if self.latest:
-            version = urllib2.urlopen(LATEST_URL).read()
+            version = urllib.request.urlopen(LATEST_URL).read()
         else:
             version = 152100
 
         tools_url = TOOLS_URL_TEMPLATE % version 
-        print "Downloading %s" % tools_url
+        print("Downloading %s" % tools_url)
 
-        tools_stream = StringIO(urllib2.urlopen(tools_url).read())
+        tools_stream = StringIO(urllib.request.urlopen(tools_url).read())
 
 
         if os.path.exists(self.dirname):
-            print "Removing existing devtools installation at %s" % self.dirname
+            print("Removing existing devtools installation at %s" % self.dirname)
             shutil.rmtree(self.dirname)
 
         extract_dir = self.dirname
-        print "Extracting to %s" % extract_dir
+        print("Extracting to %s" % extract_dir)
 
         tools_zip = zipfile.ZipFile(tools_stream, 'r')
         tools_zip.extractall(path=extract_dir)

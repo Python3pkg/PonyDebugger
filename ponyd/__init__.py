@@ -1,4 +1,4 @@
 
 # import these so all the commands are found
-import downloader
-import gateway
+from . import downloader
+from . import gateway
